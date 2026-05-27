@@ -111,6 +111,51 @@ Sau khi sửa, restart service:
 sudo systemctl restart codex-proxy
 ```
 
+## Hướng dẫn sử dụng & Thay đổi Model
+
+Người dùng có thể lựa chọn linh hoạt giữa các model có sẵn (ví dụ: `cx/gpt-5.5`, `cx/gpt-5.4`, `cx/gpt-5.3-codex`) thông qua 3 cách sau:
+
+### Cách 1: Chọn trực tiếp trên giao diện VS Code
+
+VS Code Extension của Codex hiển thị các model rút gọn theo catalog của nó:
+* Chọn **`GPT-5.5`** (gửi đi dưới dạng `gpt-5.5`)
+* Chọn **`GPT-5.4`** (gửi đi dưới dạng `gpt-5.4`)
+* Chọn **`GPT-5.3 (Codex)`** (gửi đi dưới dạng `gpt-5.3-codex`)
+
+Khi click chọn trên thanh trạng thái (status bar) hoặc cài đặt Extension, proxy local sẽ tự động remap tên model tương ứng sang tên đầy đủ của provider (ví dụ: `cx/gpt-5.4`).
+
+### Cách 2: Thiết lập model mặc định trong `config.toml`
+
+Thay đổi giá trị tại trường `model` ở đầu file cấu hình `~/.codex/config.toml`:
+
+```toml
+# Chọn cx/gpt-5.4 làm mặc định
+model_provider = "maivangia"
+model = "cx/gpt-5.4"
+model_reasoning_effort = "medium"
+```
+
+```toml
+# Chọn cx/gpt-5.3-codex làm mặc định
+model_provider = "maivangia"
+model = "cx/gpt-5.3-codex"
+model_reasoning_effort = "medium"
+```
+
+*Lưu ý: Sau khi lưu file cấu hình, hãy **Reload VS Code** (`Ctrl+Shift+P` -> `Reload Window`) để extension áp dụng cài đặt.*
+
+### Cách 3: Thay đổi linh hoạt bằng CLI parameter
+
+Khi chạy trực tiếp qua Codex CLI, bạn có thể truyền cờ `-m` hoặc `--model` để chỉ định model chạy riêng cho phiên làm việc đó:
+
+```bash
+# Sử dụng gpt-5.4
+codex exec -m cx/gpt-5.4 "Viết một hàm Python"
+
+# Sử dụng gpt-5.3
+codex exec -m cx/gpt-5.3-codex "Review file này giúp tôi"
+```
+
 ## Biến môi trường
 
 | Biến | Mô tả | Mặc định |
