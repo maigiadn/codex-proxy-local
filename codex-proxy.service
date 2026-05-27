@@ -1,0 +1,14 @@
+[Unit]
+Description=Codex Model Alias Proxy
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /home/USER/.codex/model-proxy.js
+Restart=always
+RestartSec=5
+User=USER
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
