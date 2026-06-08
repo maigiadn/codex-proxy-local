@@ -64,8 +64,9 @@ Thêm vào `~/.codex/config.toml`:
 
 ```toml
 model_provider = "maivangia"
-model = "cx/gpt-5.5"
+model = "gemini-3.1-flash-lite"
 model_reasoning_effort = "medium"
+model_catalog_json = "/home/teopc/.codex/model_catalog_1m.json"
 
 [model_providers.maivangia]
 name = "Mai Van Gia Provider"
@@ -201,6 +202,7 @@ codex-proxy-local/
 ├── uninstall.sh         # Script gỡ cài đặt
 ├── codex-proxy.service  # Systemd service template
 ├── config.toml.example  # Ví dụ config Codex
+├── model_catalog_1m.json # Danh mục model tùy chỉnh cho Codex
 └── README.md            # Tài liệu này
 ```
 

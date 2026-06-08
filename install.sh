@@ -69,16 +69,18 @@ echo -e "${GREEN}  Model:    $MODEL${NC}"
 
 # ---- Install proxy script ----
 echo ""
-echo -e "${YELLOW}[3/6] Cài đặt proxy script...${NC}"
+echo -e "${YELLOW}[3/6] Cài đặt proxy script và catalog...${NC}"
 
 mkdir -p "$INSTALL_DIR"
 cp "$SCRIPT_DIR/model-proxy.js" "$PROXY_FILE"
+cp "$SCRIPT_DIR/model_catalog_1m.json" "$INSTALL_DIR/model_catalog_1m.json"
 
 # Update PROXY_TARGET and PROXY_PORT in the proxy script defaults
 sed -i "s|https://apikey.maivangia.com|$PROXY_TARGET|g" "$PROXY_FILE"
 sed -i "s|18080|$PROXY_PORT|g" "$PROXY_FILE"
 
 echo -e "${GREEN}  ✓ Proxy script: $PROXY_FILE${NC}"
+echo -e "${GREEN}  ✓ Model catalog: $INSTALL_DIR/model_catalog_1m.json${NC}"
 
 # ---- Configure systemd service ----
 echo ""
@@ -150,6 +152,7 @@ else
             echo "model_provider = \"maivangia\""
             echo "model = \"$MODEL\""
             echo "model_reasoning_effort = \"medium\""
+            echo "model_catalog_json = \"$INSTALL_DIR/model_catalog_1m.json\""
             echo ""
             cat "$CONFIG_FILE" 2>/dev/null || true
         } > "${CONFIG_FILE}.tmp"
@@ -165,6 +168,17 @@ base_url = "http://127.0.0.1:$PROXY_PORT/v1"
 env_key = "OPENAI_API_KEY"
 wire_api = "responses"
 EOF
+fi
+
+# Ensure model_catalog_json is configured in the config file
+if grep -q "^model_catalog_json" "$CONFIG_FILE" 2>/dev/null; then
+    sed -i "s|^model_catalog_json = .*|model_catalog_json = \"$INSTALL_DIR/model_catalog_1m.json\"|" "$CONFIG_FILE"
+else
+    if grep -q "^model_reasoning_effort" "$CONFIG_FILE" 2>/dev/null; then
+        sed -i "s|^model_reasoning_effort = .*|&\nmodel_catalog_json = \"$INSTALL_DIR/model_catalog_1m.json\"|" "$CONFIG_FILE"
+    else
+        sed -i "s|^model = .*|&\nmodel_catalog_json = \"$INSTALL_DIR/model_catalog_1m.json\"|" "$CONFIG_FILE"
+    fi
 fi
 
 echo -e "${GREEN}  ✓ Codex config đã cập nhật${NC}"

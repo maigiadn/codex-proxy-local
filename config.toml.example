@@ -4,6 +4,7 @@
 model_provider = "maivangia"
 model = "cx/gpt-5.5"
 model_reasoning_effort = "medium"
+model_catalog_json = "/home/teopc/.codex/model_catalog_1m.json"
 
 [model_providers.maivangia]
 name = "Mai Van Gia Provider"
